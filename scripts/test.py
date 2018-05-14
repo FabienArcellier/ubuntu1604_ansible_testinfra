@@ -16,8 +16,15 @@ def main(arguments):
     ]
 
     for (dockerfile, image) in tests_environment:
-        print(subprocess.check_output('docker build -t {0} -f {1} .'.format(image, dockerfile), shell=True))
-        print(subprocess.check_output('docker run -v "{0}":/mnt {1} py.test /mnt/tests/test_dockerfile.py'.format(ROOT_DIR, image), shell=True))
+        _system('docker build -t {0} -f {1} .'.format(image, dockerfile))
+        _system('docker run -v "{0}":/mnt {1} py.test /mnt/tests/test_dockerfile.py'.format(ROOT_DIR, image))
+
+def _system(cmd, logged = True):
+    if logged:
+        print('$ {0}'.format(cmd))
+    if os.system(cmd) > 0:
+        raise OSError()
+
 
 if __name__ == '__main__':
     sys.exit(main(sys.argv[1:]))

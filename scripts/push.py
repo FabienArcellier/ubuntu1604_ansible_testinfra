@@ -1,5 +1,8 @@
 #!/usr/bin/env python
+# On CI, you can pass the logging and the password of dockerhub through
+# the environment variables DOCKER_USERNAME and DOCKER_PASSWORD
 
+import getpass
 import os
 import subprocess
 import sys
@@ -15,21 +18,26 @@ def main(arguments):
         ('Dockerfile.ubuntu1604', 'ubuntu1604_ansible_testinfra'),
     ]
 
-    docker_user_id = os.environ.get('DOCKER_USER_ID', None)
-    if docker_user_id is None:
-        docker_user_id = input('docker hub user (DOCKER_USER_ID) ? ')
+    docker_username = os.environ.get('DOCKER_USERNAME', None)
+    if docker_username is None:
+        docker_username = input('docker hub user (DOCKER_USERNAME) ? ')
 
-    _system('docker login')
+    docker_password = os.environ.get('DOCKER_PASSWORD', None)
+    if docker_password is None:
+        docker_password = getpass.getpass('docker hub password (DOCKER_PASSWORD) ? ')
+
+    _system('docker login -u {0} -p {1}'.format(docker_username, docker_password), logged=False)
 
     for docker_file, docker_image in docker:
         _system('docker build -f {0} -t {1} {2}'.format(docker_file, docker_image, ROOT_DIR))
 
     for _, docker_image in docker:
-        _system('docker tag {0} {1}/{0}'.format(docker_image, docker_user_id))
-        _system('docker push {1}/{0}'.format(docker_image, docker_user_id))
+        _system('docker tag {0} {1}/{0}'.format(docker_image, docker_username))
+        _system('docker push {1}/{0}'.format(docker_image, docker_username))
 
-def _system(cmd):
-    print('$ {0}'.format(cmd))
+def _system(cmd, logged = True):
+    if logged:
+        print('$ {0}'.format(cmd))
     if os.system(cmd) > 0:
         raise OSError()
 

@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/FabienArcellier/ubuntu_ansible_testinfra.svg?branch=master)](https://travis-ci.org/FabienArcellier/ubuntu_ansible_testinfra)
+
 Ubuntu LTS docker image that help to [write white-box testing](https://en.wikipedia.org/wiki/White-box_testing) on ansible role
  or shell script with [py.test or testinfra](https://testinfra.readthedocs.io/en/latest/).
 
@@ -25,4 +27,3 @@ Build your own images
 * fork the repo
 * change the Dockerfile or create a new one
 * use `scripts/push.py` or dockerhub CI to build and publish your own images on Dockerhub
-

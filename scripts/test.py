@@ -16,7 +16,7 @@ def main(arguments):
     ]
 
     for (dockerfile, image) in tests_environment:
-        _system('docker build -t {0} -f {1} .'.format(image, dockerfile))
+        _system('cd dockerfiles; docker build -t {0} -f {1} .'.format(image, dockerfile))
         _system('docker run -v "{0}":/mnt {1} py.test /mnt/tests/test_dockerfile.py'.format(ROOT_DIR, image))
 
 def _system(cmd, logged = True):

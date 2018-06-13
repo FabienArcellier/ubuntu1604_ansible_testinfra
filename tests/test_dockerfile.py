@@ -7,3 +7,6 @@ def test_pytest_is_installed(host):
 def test_ansible_run_on_localhost(host):
     cmd = host.run("ansible-playbook {0}/fixture/validate_ansible.yml".format(SCRIPT_DIR))
     assert cmd.rc == 0, print(cmd.stdout)
+
+def test_systemd_is_installed(host):
+    assert host.exists("/lib/systemd/systemd")

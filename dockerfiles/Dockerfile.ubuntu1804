@@ -6,7 +6,7 @@ RUN apt-get update && \
     apt-get install -y python3-dev && \
     apt-get install -y python3-pip && \
     apt-get install -y libssl-dev && \
-    apt-get install systemd
+    apt-get install -y systemd
 
 RUN pip3 install ansible && \
     pip3 install pytest && \
@@ -14,3 +14,5 @@ RUN pip3 install ansible && \
 
 RUN mkdir -p '/etc/ansible' && \
     echo '[local]\nlocalhost ansible_connection=local\n' > /etc/ansible/hosts
+
+CMD /lib/systemd/systemd
